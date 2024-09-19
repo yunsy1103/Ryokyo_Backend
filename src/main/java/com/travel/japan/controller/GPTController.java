@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Locale;
 
 @RestController
-@CrossOrigin(origins = "http://***REMOVED***:8081")
+@CrossOrigin(origins = "*")  // 모든 출처 허용
 @RequestMapping("/api/gpt")
 @RequiredArgsConstructor
 @Tag(name = "GPT", description = "GPT API")
