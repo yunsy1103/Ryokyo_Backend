@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,10 +26,11 @@ public class LocationService {
 
     // 반경 내 사용자 검색 및 저장
     public List<FilteredMember> getNearbyUsers(String email, double radius) {
+
         // 로그인된 사용자의 위치 정보 가져오기
         Member loggedInUser = getLoggedInUser(email);
-         double lat1 = loggedInUser.getLatitude();
-         double lon1 = loggedInUser.getLongitude();
+        double lat1 = Optional.ofNullable(loggedInUser.getLatitude()).orElse(0.0);
+        double lon1 = Optional.ofNullable(loggedInUser.getLongitude()).orElse(0.0);
 
         // 로그인된 사용자를 제외한 모든 사용자 가져오기
         List<Member> allMembers = memberRepository.findAllExceptEmail(email);
