@@ -47,9 +47,9 @@ public class Member extends BaseEntity {
 
     //경도,위도 컬럼 추가
     @Column(name = "latitude",nullable = true)
-    private Double latitude;
+    private Double latitude = 0.0;
     @Column(name = "longitude",nullable = true)
-    private Double longitude;
+    private Double longitude = 0.0;
 
     // 상태 필드 추가
     @Builder.Default
