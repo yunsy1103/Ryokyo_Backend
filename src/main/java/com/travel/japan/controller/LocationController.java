@@ -23,11 +23,13 @@ public class LocationController {
 
     @PostMapping("/save")
     public ResponseEntity<String> saveLocation(@RequestBody LocationRequest locationRequest) {
+        System.out.println("saveLocation endpoint reached");
         double latitude = locationRequest.getLatitude();
         double longitude = locationRequest.getLongitude();
 
         // 로그인된 사용자 정보 가져오기
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println("Authentication after setting: " + SecurityContextHolder.getContext().getAuthentication());
 
         // 이메일로 사용자를 조회하여 경도, 위도 업데이트
         Optional<Member> memberOptional = memberRepository.findByEmail(email);
