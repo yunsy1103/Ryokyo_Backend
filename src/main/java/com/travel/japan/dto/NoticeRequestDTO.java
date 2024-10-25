@@ -1,6 +1,5 @@
 package com.travel.japan.dto;
 
-import com.travel.japan.entity.Notice;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -8,11 +7,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
-public class ResponseDTO {
+public class NoticeRequestDTO {
 
     private String nickname;
 
@@ -26,7 +24,7 @@ public class ResponseDTO {
     private List<String> imageUrls; // 이미지 URL 리스트
 
     @Builder
-    public ResponseDTO( String nickname,String title, String content,List<String> imageUrls) {
+    public NoticeRequestDTO(String nickname, String title, String content, List<String> imageUrls) {
         this.nickname =nickname;
         this.title = title;
         this.content = content;
