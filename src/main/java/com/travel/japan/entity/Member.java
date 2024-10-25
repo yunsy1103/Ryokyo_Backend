@@ -46,8 +46,11 @@ public class Member extends BaseEntity {
     private Nationality nationality;
 
     //경도,위도 컬럼 추가
+    @Builder.Default
     @Column(name = "latitude",nullable = true)
     private Double latitude = 0.0;
+
+    @Builder.Default
     @Column(name = "longitude",nullable = true)
     private Double longitude = 0.0;
 
