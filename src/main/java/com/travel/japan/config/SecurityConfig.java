@@ -69,8 +69,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/login").permitAll()
-                                .requestMatchers("/api/match/**").authenticated()
-                                .requestMatchers("/api/location/**").authenticated()
+                                .requestMatchers("/api/match/nearby").authenticated()
+                                .requestMatchers("/api/location/save").authenticated()
                                 .requestMatchers("/firebase/**").authenticated()
                                 .requestMatchers("/swagger-ui.html").permitAll()
                                 .requestMatchers("/api/notice/**").authenticated()
