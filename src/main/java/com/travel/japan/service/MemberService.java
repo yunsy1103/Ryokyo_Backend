@@ -14,6 +14,9 @@ public interface MemberService {
     public Long signup(MemberSignUpDto memberSignUpDto) throws Exception;
 
     public TokenInfo signIn(MemberSignInDto requestDto) throws Exception;
+
+    public Member findByEmail(String email) ;
+
     public void updateProfile(String email, MemberProfileUpdateDto profileDto);
 
 }

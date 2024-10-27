@@ -1,10 +1,8 @@
 package com.travel.japan.controller;
 
-import com.travel.japan.dto.LoginResponseDto;
-import com.travel.japan.dto.MemberProfileUpdateDto;
-import com.travel.japan.dto.MemberSignInDto;
-import com.travel.japan.dto.MemberSignUpDto;
+import com.travel.japan.dto.*;
 import com.travel.japan.entity.Member;
+import com.travel.japan.entity.Notice;
 import com.travel.japan.jwt.TokenInfo;
 import com.travel.japan.repository.MemberRepository;
 import com.travel.japan.security.CustomUserDetails;
@@ -55,6 +53,7 @@ public class MemberController {
         }
     }
 
+
     @Operation(summary = "회원 페이지", description = "마이페이지")
     @PutMapping("/profile")
     public ResponseEntity<String> updateProfile(@RequestBody MemberProfileUpdateDto profileDto) {
@@ -66,5 +65,31 @@ public class MemberController {
         memberService.updateProfile(currentEmail, profileDto);
 
         return ResponseEntity.ok("프로필 업데이트 성공");
+    }
+
+    @Operation(summary = "회원 페이지 조회", description = "마이페이지 조회")
+    @GetMapping("/profile")
+    public ResponseEntity<?> getProfile() {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String currentEmail = authentication.getName();
+
+            Member member = memberService.findByEmail(currentEmail);
+
+            if (member != null) {
+                MemberProfileDTO profileDto = MemberProfileDTO.builder()
+                        .email(member.getEmail())
+                        .nickname(member.getNickname())
+                        .gender(member.getGender())
+                        .birth(member.getBirth())
+                        .nationality(member.getNationality())
+                        .build();
+                return ResponseEntity.ok(profileDto);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원 정보를 찾을 수 없습니다.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 정보 조회 중 오류가 발생했습니다: " + e.getMessage());
+        }
     }
 }
