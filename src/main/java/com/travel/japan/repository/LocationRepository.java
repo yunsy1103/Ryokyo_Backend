@@ -16,7 +16,7 @@ public interface LocationRepository extends JpaRepository<FilteredMember, Long> 
             "cos(radians(ul.longitude) - radians(:longitude)) + sin(radians(:latitude)) * " +
             "sin(radians(ul.latitude)))) < :radius " )
     List<FilteredMember> findAllWithinRadius(@Param("latitude") double latitude,
-                                              @Param("longitude") double longitude,
-                                              @Param("radius") double radius);
+                                             @Param("longitude") double longitude,
+                                             @Param("radius") double radius);
 
 }

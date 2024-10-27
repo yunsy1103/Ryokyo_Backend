@@ -41,7 +41,7 @@ public class LocationService {
 
             // 거리가 반경(radius) 이내인 경우 추가
             if (distance <= radius) {
-                FilteredMember filteredMember = new FilteredMember(member.getEmail(),member.getNickname(),member.getGender(), member.getBirth(), member.getNationality());
+                FilteredMember filteredMember = new FilteredMember(member.getEmail(),member.getNickname(),member.getGender(), member.getBirth(), member.getNationality(), member.getLatitude(), member.getLongitude());
                 nearbyUsers.add(filteredMember);
             }
         }
