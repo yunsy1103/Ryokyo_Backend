@@ -65,7 +65,7 @@ jobs:
         run: sudo docker stop $(sudo docker ps -q) 2>/dev/null || true
 
       - name: Run new container
-        run: sudo docker run --name japan-travelling --rm -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/japan-travelling
+        run: sudo docker run --name japan-travelling --rm -d -p ***REMOVED***:8080 ${{ secrets.DOCKERHUB_USERNAME }}/japan-travelling
 
       - name: Cleanup old Docker images
         run: sudo docker system prune -f
