@@ -7,6 +7,7 @@ import com.travel.japan.jwt.TokenInfo;
 import com.travel.japan.repository.MemberRepository;
 import com.travel.japan.security.CustomUserDetails;
 import com.travel.japan.service.MemberService;
+import com.travel.japan.service.S3Upload;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -26,7 +31,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Member", description = "Member API")
 public class MemberController {
     private final MemberService memberService;
-    private final MemberRepository memberRepository;
+    private final S3Upload s3Upload;
 
 
     @Operation(summary = "회원 등록", description = "회원 가입")
@@ -67,6 +72,25 @@ public class MemberController {
         return ResponseEntity.ok("프로필 업데이트 성공");
     }
 
+    @Operation(summary = "회원 페이지 이미지 추가", description = "마이페이지")
+    @PutMapping("/profile/image")
+    public ResponseEntity<String> updateProfileImage(@RequestPart("newProfileImage") MultipartFile newProfileImage)  {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String currentEmail = authentication.getName();
+
+            // 이미지 파일 업로드
+            String imageUrl = s3Upload.uploadFiles(newProfileImage, "profile_images");
+
+            // 서비스 계층을 통해 프로필 이미지 URL 업데이트
+            memberService.updateProfileImage(currentEmail, imageUrl);
+
+            return ResponseEntity.ok("프로필 이미지 업데이트 성공");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지 업로드에 실패했습니다.");
+        }
+    }
+
     @Operation(summary = "회원 페이지 조회", description = "마이페이지 조회")
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile() {
@@ -83,6 +107,7 @@ public class MemberController {
                         .gender(member.getGender())
                         .birth(member.getBirth())
                         .nationality(member.getNationality())
+                        .profileImageUrl(member.getProfileImageUrl())
                         .build();
                 return ResponseEntity.ok(profileDto);
             } else {
@@ -92,4 +117,5 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 정보 조회 중 오류가 발생했습니다: " + e.getMessage());
         }
     }
+
 }
