@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,7 +37,7 @@ public class NoticeController {
 
 
     @Operation(summary = "게시글 생성", description = "전체 게시글 생성")
-    @PostMapping("/notice")
+    @PostMapping(value ="/notice", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createNotice(@RequestParam("title") String title,
                                           @RequestParam("content") String content,
                                           @RequestPart(value = "images", required = false) List<MultipartFile> files) {
