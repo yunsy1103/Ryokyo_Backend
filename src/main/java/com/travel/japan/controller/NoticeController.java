@@ -1,6 +1,7 @@
 package com.travel.japan.controller;
 
 import com.travel.japan.dto.NoticeRequestDTO;
+import com.travel.japan.dto.NoticeResponseDTO;
 import com.travel.japan.entity.Member;
 import com.travel.japan.entity.Notice;
 import com.travel.japan.entity.NoticeImage;
@@ -36,7 +37,7 @@ public class NoticeController {
 
     @Operation(summary = "게시글 생성", description = "전체 게시글 생성")
     @PostMapping("/notice")
-    public ResponseEntity<?> createNotice(@Validated @RequestPart("data") NoticeRequestDTO responseDTO,
+    public ResponseEntity<?> createNotice(@ModelAttribute NoticeRequestDTO responseDTO,
                                           @RequestPart(value = "images", required = false) List<MultipartFile> files) {
 
         // 현재 인증된 사용자 가져오기
@@ -61,7 +62,7 @@ public class NoticeController {
 
 
         // 저장된 게시글 정보를 DTO로 반환
-        NoticeRequestDTO response = NoticeRequestDTO.builder()
+        NoticeResponseDTO response = NoticeResponseDTO.builder()
                 .title(savedNotice.getTitle())
                 .content(savedNotice.getContent())
                 .nickname(savedNotice.getNickname())
