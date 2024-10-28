@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+//회원 프로필 조회
 @Data
 @Builder
 @AllArgsConstructor
@@ -16,4 +17,5 @@ public class MemberProfileDTO {
     private String gender;
     private LocalDate birth;
     private Nationality nationality;
+    private String profileImageUrl;
 }

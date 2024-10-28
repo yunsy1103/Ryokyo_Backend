@@ -5,9 +5,11 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
+//마이페이지 프로필 정보 추가
 @Data
 @Builder
 @AllArgsConstructor
@@ -22,6 +24,10 @@ public class MemberProfileUpdateDto {
     private LocalDate birth;       // null 허용
 
     private Nationality nationality; // null 허용
+
+    private String profileImageUrl; // 현재 프로필 이미지 URL
+
+    private MultipartFile newProfileImage; // 새로운 이미지를 업로드하기 위한 필드
 
     public MemberProfileUpdateDto() {
     }
