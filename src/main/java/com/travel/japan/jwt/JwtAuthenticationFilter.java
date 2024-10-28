@@ -50,6 +50,12 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             return;
         }
 
+        // s3 경로는 필터링하지 않음
+        if (path.startsWith("/api/s3/image")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         // GPT 경로는 필터링하지 않음
         if (path.startsWith("/api/gpt")) {
             chain.doFilter(request, response);
