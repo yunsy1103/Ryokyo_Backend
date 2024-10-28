@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  deploy:
+ build-docker-image:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -49,6 +49,23 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-       # 5. Docker Hub 이미지 푸시
-      - name: docker Hub push
+      - name: Docker Push
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/japan-travelling
+
+  # 2. 빌드된 Docker 이미지를 EC2에서 pull 받고 실행하는 과정
+ run-docker-image-on-ec2:
+    needs: build-docker-image  # build-docker-image job 완료 후 실행
+    runs-on: self-hosted  # self-hosted runner 사용 (EC2 인스턴스 설정 필요)
+
+    steps:
+      - name: Pull latest Docker Image
+        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/japan-travelling
+
+      - name: Stop existing container
+        run: sudo docker stop $(sudo docker ps -q) 2>/dev/null || true
+
+      - name: Run new container
+        run: sudo docker run --name japan-travelling --rm -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/japan-travelling
+
+      - name: Cleanup old Docker images
+        run: sudo docker system prune -f
