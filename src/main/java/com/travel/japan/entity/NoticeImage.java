@@ -1,6 +1,7 @@
 package com.travel.japan.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,6 +21,7 @@ public class NoticeImage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "notice_id")
+    @JsonBackReference
     @ToString.Exclude  // 순환 참조 방지
     @EqualsAndHashCode.Exclude  // 순환 참조 방지
     private Notice notice; // 게시글과 연관 관계
