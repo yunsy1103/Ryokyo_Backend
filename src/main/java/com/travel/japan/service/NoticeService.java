@@ -29,36 +29,32 @@ public class NoticeService {
     @Autowired
     private NoticeRepository noticeRepository;
 
-    private static final String UPLOAD_DIR = "/var/www/uploads"; // 서버에 저장할 경로
+    private final S3Upload s3Upload;
+    @Autowired
+    public NoticeService(S3Upload s3Upload) {
+        this.s3Upload = s3Upload;
+    }
     // 게시글 생성
     public Notice createNotice(Notice notice, List<MultipartFile> files) {
-        // 이미지 파일이 있을 경우 업로드 처리
+
+        // 먼저 게시글을 저장 (ID가 할당됨)
+        Notice savedNotice = noticeRepository.save(notice);
         if (files != null && !files.isEmpty()) {
             List<NoticeImage> noticeImages = files.stream()
-                    .map(file -> new NoticeImage(null, uploadImage(file), notice))
+                    .map(file -> {
+                        try {
+                            String imageUrl = s3Upload.uploadFiles(file, "images");  // S3에 업로드
+                            return new NoticeImage(null, imageUrl, notice); // 업로드된 URL을 NoticeImage 객체에 설정
+                        } catch (IOException e) {
+                            throw new RuntimeException("파일 업로드 중 오류가 발생했습니다.", e);
+                        }
+                    })
                     .collect(Collectors.toList());
             notice.setBoardImages(noticeImages); // 이미지 리스트 설정
         }
 
         // 게시글 저장
         return noticeRepository.save(notice);
-    }
-
-    // 이미지 업로드 처리
-    public String uploadImage(MultipartFile file) {
-        try {
-            // 파일 저장 경로 설정
-            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-            String filePath = UPLOAD_DIR + File.separator + fileName;
-
-            // 파일을 서버에 저장
-            Files.copy(file.getInputStream(), Paths.get(filePath));
-
-            // 파일이 저장된 경로를 URL로 반환
-            return "/uploads/" + fileName; // 클라이언트가 접근할 수 있는 URL 반환
-        } catch (IOException e) {
-            throw new RuntimeException("파일 업로드 중 오류가 발생했습니다.", e);
-        }
     }
 
 
@@ -91,12 +87,11 @@ public class NoticeService {
         Notice notice = noticeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Board not exist with id :" + id));
 
-        // 게시글에 연결된 이미지 삭제 처리 (파일 시스템에서 삭제)
+        // S3에서 게시글에 연결된 이미지 삭제 처리
         for (NoticeImage image : notice.getBoardImages()) {
-            File file = new File(UPLOAD_DIR + File.separator + image.getUrl().replace("/uploads/", ""));
-            if (file.exists()) {
-                file.delete();
-            }
+            String imageUrl = image.getUrl();
+            String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);  // S3에 저장된 파일 이름 추출
+            s3Upload.deleteFile(fileName, "images"); // S3에서 파일 삭제
         }
 
         noticeRepository.delete(notice);
