@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -73,7 +74,7 @@ public class MemberController {
     }
 
     @Operation(summary = "회원 페이지 이미지 추가", description = "마이페이지")
-    @PutMapping("/profile/image")
+    @PutMapping(value = "/profile/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateProfileImage(@RequestPart("newProfileImage") MultipartFile newProfileImage)  {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
