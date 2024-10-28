@@ -54,6 +54,10 @@ public class Member extends BaseEntity {
     @Column(name = "longitude",nullable = true)
     private Double longitude = 0.0;
 
+    // 프로필 이미지 URL 필드
+    @Column(name = "profileImage",nullable = true)
+    private String profileImageUrl;
+
     // 상태 필드 추가
     @Builder.Default
     @Column(name = "status",nullable = false)

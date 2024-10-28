@@ -103,7 +103,18 @@ public class MemberServiceImpl implements MemberService{
         if (profileDto.getNationality() != null) {
             member.setNationality(profileDto.getNationality());
         }
+        if (profileDto.getProfileImageUrl() != null) {
+            member.setProfileImageUrl(profileDto.getProfileImageUrl());
+        }
 
+        memberRepository.save(member);
+    }
+
+    public void updateProfileImage(String email, String imageUrl) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        member.setProfileImageUrl(imageUrl);
         memberRepository.save(member);
     }
 

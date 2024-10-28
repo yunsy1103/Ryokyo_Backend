@@ -16,6 +16,7 @@ public interface MemberService {
     public TokenInfo signIn(MemberSignInDto requestDto) throws Exception;
 
     public Member findByEmail(String email) ;
+    public void updateProfileImage(String email, String imageUrl);
 
     public void updateProfile(String email, MemberProfileUpdateDto profileDto);
 
