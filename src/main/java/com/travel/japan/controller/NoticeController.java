@@ -36,7 +36,7 @@ public class NoticeController {
 
     @Operation(summary = "게시글 생성", description = "전체 게시글 생성")
     @PostMapping("/notice")
-    public ResponseEntity<?> createNotice(@Validated @RequestParam("data") NoticeRequestDTO responseDTO,
+    public ResponseEntity<?> createNotice(@Validated @RequestPart("data") NoticeRequestDTO responseDTO,
                                           @RequestPart(value = "images", required = false) List<MultipartFile> files) {
 
         // 현재 인증된 사용자 가져오기
