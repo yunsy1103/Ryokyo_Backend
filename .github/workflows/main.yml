@@ -28,6 +28,7 @@ jobs:
           ./gradlew build -x test
         env:
           MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+          MYSQL_URL: ${{ secrets.MYSQL_URL }}
           MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           GPT_API_KEY: ${{ secrets.GPT_API_KEY }}
           GPT_API_URL: ${{ secrets.GPT_API_URL }}
