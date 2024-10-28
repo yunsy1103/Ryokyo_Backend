@@ -37,7 +37,8 @@ public class NoticeController {
 
     @Operation(summary = "게시글 생성", description = "전체 게시글 생성")
     @PostMapping("/notice")
-    public ResponseEntity<?> createNotice(@ModelAttribute NoticeRequestDTO responseDTO,
+    public ResponseEntity<?> createNotice(@RequestParam("title") String title,
+                                          @RequestParam("content") String content,
                                           @RequestPart(value = "images", required = false) List<MultipartFile> files) {
 
         // 현재 인증된 사용자 가져오기
@@ -53,8 +54,8 @@ public class NoticeController {
         String nickname = member.getNickname();
 
         Notice notice = new Notice();
-        notice.setTitle(responseDTO.getTitle());
-        notice.setContent(responseDTO.getContent());
+        notice.setTitle(title);
+        notice.setContent(content);
         notice.setNickname(nickname);
 
         // Notice 엔티티와 이미지 파일을 함께 서비스 계층에 전달
