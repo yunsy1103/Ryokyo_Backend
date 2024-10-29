@@ -38,7 +38,11 @@ public class FilteredMember {
     @Column(name = "longitude",nullable = true)
     private Double longitude = 0.0;
 
-    public FilteredMember(String email, String nickname, String gender, LocalDate birth, Nationality nationality, Double latitude, Double longitude) {
+    // 프로필 이미지 URL 필드
+    @Column(name = "profileImage",nullable = true)
+    private String profileImageUrl;
+
+    public FilteredMember(String email, String nickname, String gender, LocalDate birth, Nationality nationality, Double latitude, Double longitude,String profileImageUrl) {
         this.email = email;
         this.nickname = nickname;
         this.gender = gender;
@@ -46,6 +50,10 @@ public class FilteredMember {
         this.nationality = nationality;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.profileImageUrl = profileImageUrl;
     }
+
+
+
 
 }
