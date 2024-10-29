@@ -34,15 +34,4 @@ public class MatchController {
         return locationService.getNearbyUsers(email, radius);
     }
 
-    // 국적 반대인 사용자 조회
-    public Nationality getOppositeNationality(Nationality nationality) {
-        if (nationality == Nationality.KOREAN) {
-            return Nationality.JAPANESE;
-        } else if (nationality == Nationality.JAPANESE) {
-            return Nationality.KOREAN;
-        } else {
-            //다른 국적일 경우 매칭 제외
-            return null;
-        }
-    }
 }

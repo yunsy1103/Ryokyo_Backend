@@ -2,6 +2,7 @@ package com.travel.japan.service;
 
 import com.travel.japan.entity.FilteredMember;
 import com.travel.japan.entity.Member;
+import com.travel.japan.entity.Nationality;
 import com.travel.japan.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,18 @@ public class LocationService {
     @Autowired
     private MemberRepository memberRepository;
 
+    // 국적이 반대인 사용자 조회 메서드
+    public Nationality getOppositeNationality(Nationality nationality) {
+        if (nationality == Nationality.KOREAN) {
+            return Nationality.JAPANESE;
+        } else if (nationality == Nationality.JAPANESE) {
+            return Nationality.KOREAN;
+        } else {
+            return null; // 기타 국적은 제외
+        }
+    }
+
+
     // 로그인된 사용자의 위치 정보 조회
     public Member getLoggedInUser(String email) {
         return memberRepository.findByEmail(email)
@@ -30,6 +43,9 @@ public class LocationService {
          double lat1 = loggedInUser.getLatitude();
          double lon1 = loggedInUser.getLongitude();
 
+        // 로그인된 사용자의 국적 정보 가져오기
+        Nationality oppositeNationality = getOppositeNationality(loggedInUser.getNationality());
+
         // 로그인된 사용자를 제외한 모든 사용자 가져오기
         List<Member> allMembers = memberRepository.findAllExceptEmail(email);
 
@@ -37,14 +53,27 @@ public class LocationService {
 
         // 반경 내 사용자 필터링
         for (Member member : allMembers) {
-            double distance = calculateDistance(lat1, lon1, member.getLatitude(), member.getLongitude());
+            // 반대 국적의 사용자만 포함
+            if (member.getNationality() == oppositeNationality) {
+                double distance = calculateDistance(lat1, lon1, member.getLatitude(), member.getLongitude());
 
-            // 거리가 반경(radius) 이내인 경우 추가
-            if (distance <= radius) {
-                FilteredMember filteredMember = new FilteredMember(member.getEmail(),member.getNickname(),member.getGender(), member.getBirth(), member.getNationality(), member.getLatitude(), member.getLongitude());
-                nearbyUsers.add(filteredMember);
+                // 거리가 반경(radius) 이내인 경우 추가
+                if (distance <= radius) {
+                    FilteredMember filteredMember = new FilteredMember(
+                            member.getEmail(),
+                            member.getNickname(),
+                            member.getGender(),
+                            member.getBirth(),
+                            member.getNationality(),
+                            member.getLatitude(),
+                            member.getLongitude(),
+                            member.getProfileImageUrl() // 수정된 부분
+                    );
+                    nearbyUsers.add(filteredMember);
+                }
             }
         }
+
         // 리스트를 랜덤으로 섞음
         Collections.shuffle(nearbyUsers);
 
