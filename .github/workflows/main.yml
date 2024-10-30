@@ -65,6 +65,13 @@ jobs:
         run: |
           sudo docker stop japan-travelling || true
           sudo docker rm japan-travelling || true
+
+      - name: Debug Environment Variables
+        run: |
+          echo "MYSQL_URL=${{ secrets.MYSQL_URL }}"
+          echo "MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }}"
+          echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}"
+          echo "CLOUD_AWS_ACCESSKEY=${{ secrets.CLOUD_AWS_ACCESSKEY }}"
           
       - name: Run new container
         run: |
