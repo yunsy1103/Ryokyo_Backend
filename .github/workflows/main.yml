@@ -66,18 +66,20 @@ jobs:
 
       - name: Run new container
         run: |
-          sudo docker run --name japan-travelling --rm -d -p 8080:8080 \
-            -e MYSQL_URL=${{ secrets.MYSQL_URL }} \
-            -e MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
-            -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
-            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
-            -e GPT_API_KEY=${{ secrets.GPT_API_KEY }} \
-            -e GPT_API_URL=${{ secrets.GPT_API_URL }} \
-            -e CLOUD_AWS_ACCESSKEY=${{ secrets.CLOUD_AWS_ACCESSKEY }} \
-            -e CLOUD_AWS_SECRETKEY=${{ secrets.CLOUD_AWS_SECRETKEY }} \
-            -e CLOUD_AWS_BUCKET=${{ secrets.CLOUD_AWS_BUCKET }} \
-            -e CLOUD_AWS_REGION=${{ secrets.CLOUD_AWS_REGION }} \
-            ${{ secrets.DOCKERHUB_USERNAME }}/japan-travelling
+          sudo docker run --name japan-travelling -d -p 8080:8080 \
+          --restart unless-stopped \
+          -e MYSQL_URL=${{ secrets.MYSQL_URL }} \
+          -e MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
+          -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
+          -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+          -e GPT_API_KEY=${{ secrets.GPT_API_KEY }} \
+          -e GPT_API_URL=${{ secrets.GPT_API_URL }} \
+          -e CLOUD_AWS_ACCESSKEY=${{ secrets.CLOUD_AWS_ACCESSKEY }} \
+          -e CLOUD_AWS_SECRETKEY=${{ secrets.CLOUD_AWS_SECRETKEY }} \
+          -e CLOUD_AWS_BUCKET=${{ secrets.CLOUD_AWS_BUCKET }} \
+          -e CLOUD_AWS_REGION=${{ secrets.CLOUD_AWS_REGION }} \
+          ${{ secrets.DOCKERHUB_USERNAME }}/japan-travelling
+
 
       - name: Cleanup old Docker images
         run: sudo docker system prune -f
