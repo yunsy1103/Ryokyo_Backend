@@ -61,9 +61,11 @@ jobs:
       - name: Pull latest Docker Image
         run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/japan-travelling
 
-      - name: Stop existing container
-        run: sudo docker stop $(sudo docker ps -q) 2>/dev/null || true
-
+      - name: Stop and Remove Existing Container
+        run: |
+          sudo docker stop japan-travelling || true
+          sudo docker rm japan-travelling || true
+          
       - name: Run new container
         run: |
           sudo docker run --name japan-travelling -d -p 8080:8080 \
