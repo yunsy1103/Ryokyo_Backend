@@ -79,6 +79,5 @@ jobs:
             -e CLOUD_AWS_REGION=${{ secrets.CLOUD_AWS_REGION }} \
             ${{ secrets.DOCKERHUB_USERNAME }}/japan-travelling
 
-          
       - name: Cleanup old Docker images
         run: sudo docker system prune -f
