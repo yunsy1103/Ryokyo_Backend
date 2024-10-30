@@ -66,7 +66,7 @@ jobs:
 
       - name: Run new container
         run: |
-          sudo docker run --name japan-travelling --rm -d -p 8080:8080 \
+          sudo docker run --name japan-travelling -d -p 8080:8080 \
           --restart unless-stopped \ 
             -e MYSQL_URL=${{ secrets.MYSQL_URL }} \
             -e MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
