@@ -56,6 +56,9 @@ jobs:
             docker run --name japan-travelling -d -p 8080:8080 \
               --restart unless-stopped \
               —env-file /home/ec2-user/.env \
+              -e MYSQL_URL=${{ secrets.MYSQL_URL }} \
+              -e MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} \
+              -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
               ${{ secrets.DOCKERHUB_USERNAME }}/japan-travelling
 
             docker system prune -f
