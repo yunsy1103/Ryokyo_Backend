@@ -55,7 +55,16 @@ jobs:
             docker rm japan-travelling || true
             docker run --name japan-travelling -d -p 8080:8080 \
               --restart unless-stopped \
-              --env-file /home/ec2-user/.env \
+              -e SPRING_DATASOURCE_URL=${{ secrets.MYSQL_URL }} \
+              -e SPRING_DATASOURCE_USERNAME=${{ secrets.MYSQL_USERNAME }} \
+              -e SPRING_DATASOURCE_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
+              -e JWT_SECRET_TOKEN=${{ secrets.JWT_SECRET }} \
+              -e GPT_API_KEY=${{ secrets.GPT_API_KEY }} \
+              -e GPT_API_URL=${{ secrets.GPT_API_URL }} \
+              -e CLOUD_AWS_ACCESSKEY=${{ secrets.CLOUD_AWS_ACCESSKEY }} \
+              -e CLOUD_AWS_SECRETKEY=${{ secrets.CLOUD_AWS_SECRETKEY }} \
+              -e CLOUD_AWS_BUCKET=${{ secrets.CLOUD_AWS_BUCKET }} \
+              -e CLOUD_AWS_REGION=${{ secrets.CLOUD_AWS_REGION }} \
               ${{ secrets.DOCKERHUB_USERNAME }}/japan-travelling
 
             docker system prune -f
