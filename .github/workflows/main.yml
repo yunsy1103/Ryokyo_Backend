@@ -55,7 +55,7 @@ jobs:
             docker rm japan-travelling || true
             docker run --name japan-travelling -d -p 8080:8080 \
               --restart unless-stopped \
-              --env-file /home/ec2-user/.env 
+              --env-file /home/ec2-user/.env \
               ${{ secrets.DOCKERHUB_USERNAME }}/japan-travelling
 
             docker system prune -f
