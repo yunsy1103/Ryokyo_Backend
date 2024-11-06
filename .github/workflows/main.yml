@@ -51,7 +51,8 @@ jobs:
           port: 22
           script: |
             docker network create japan-net || true
-      
+
+            docker rm -f mysql-db || true
             docker run --name mysql-db \
             --network japan-net \
             -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} \
