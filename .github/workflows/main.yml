@@ -65,9 +65,7 @@ jobs:
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/japan-travelling
             docker stop japan-travelling || true
             docker rm japan-travelling || true
-            docker run --name japan-travelling 
-              --network japan-net \
-              -d -p 8080:8080 \
+            docker run --name japan-travelling --network japan-net -d -p 8080:8080 \
               --restart unless-stopped \
               --env-file /home/ec2-user/.env \
               ${{ secrets.DOCKERHUB_USERNAME }}/japan-travelling
