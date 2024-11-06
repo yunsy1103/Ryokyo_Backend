@@ -50,6 +50,17 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
+            docker network create japan-net || true
+      
+            docker run --name mysql-db \
+            --network japan-net \
+            -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} \
+            -e MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }} \
+            -e MYSQL_USER=${{ secrets.MYSQL_USER }} \
+            -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
+            -v mysql-data:/var/lib/mysql \
+            -d mysql:8.0 || true
+      
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/japan-travelling
             docker stop japan-travelling || true
             docker rm japan-travelling || true
