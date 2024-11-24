@@ -5,6 +5,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 application.properties
+.env
+replace.txt
 
 ### STS ###
 .apt_generated
